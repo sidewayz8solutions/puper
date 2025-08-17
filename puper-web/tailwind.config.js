@@ -22,14 +22,12 @@ export default {
           950: '#2f2419',
         },
         // Psychedelic accent colors
-        psychedelic: {
-          purple: '#8B5CF6',
-          pink: '#EC4899',
-          orange: '#F97316',
-          lime: '#84CC16',
-          cyan: '#06B6D4',
-          yellow: '#EAB308',
-        },
+        'psychedelic-purple': '#8B5CF6',
+        'psychedelic-pink': '#EC4899',
+        'psychedelic-orange': '#F97316',
+        'psychedelic-lime': '#84CC16',
+        'psychedelic-cyan': '#06B6D4',
+        'psychedelic-yellow': '#EAB308',
         // Semantic colors
         success: '#10B981',
         warning: '#F59E0B',
