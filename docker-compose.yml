@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database with PostGIS extension
+  postgres:
+    image: postgis/postgis:15-3.3
+    container_name: puper_postgres
+    environment:
+      POSTGRES_DB: puper
+      POSTGRES_USER: puper_user
+      POSTGRES_PASSWORD: puper_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - puper_network
+
+  # Redis for caching
+  redis:
+    image: redis:7-alpine
+    container_name: puper_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - puper_network
+
+  # FastAPI Application
+  api:
+    build: .
+    container_name: puper_api
+    environment:
+      DATABASE_URL: postgresql://puper_user:puper_password@postgres:5432/puper
+      REDIS_URL: redis://redis:6379
+      SECRET_KEY: development-secret-key-change-in-production
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - .:/app
+    networks:
+      - puper_network
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  puper_network:
+    driver: bridge

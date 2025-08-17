@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap');
+@import 'mapbox-gl/dist/mapbox-gl.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gradient-to-br from-primary-50 to-primary-100 text-primary-900 font-sans;
+    margin: 0;
+    min-height: 100vh;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display font-semibold;
+  }
+}
+
+@layer components {
+  /* Custom button styles */
+  .btn-primary {
+    @apply bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg;
+  }
+
+  .btn-secondary {
+    @apply bg-white hover:bg-primary-50 text-primary-700 border border-primary-200 font-medium py-2 px-4 rounded-lg transition-all duration-200;
+  }
+
+  .btn-psychedelic {
+    @apply bg-gradient-to-r from-psychedelic-purple to-psychedelic-pink text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 shadow-glow hover:shadow-glow-pink;
+  }
+
+  /* Card styles */
+  .card {
+    @apply bg-white rounded-xl shadow-md border border-primary-100 p-6;
+  }
+
+  .card-hover {
+    @apply card hover:shadow-lg hover:border-primary-200 transition-all duration-200;
+  }
+
+  /* Input styles */
+  .input-primary {
+    @apply w-full px-3 py-2 border border-primary-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white text-primary-900;
+  }
+
+  /* Map container */
+  .map-container {
+    @apply relative w-full h-full rounded-xl overflow-hidden shadow-lg;
+  }
+
+  /* Psychedelic gradient backgrounds */
+  .bg-psychedelic-1 {
+    @apply bg-gradient-to-r from-psychedelic-purple via-psychedelic-pink to-psychedelic-orange;
+  }
+
+  .bg-psychedelic-2 {
+    @apply bg-gradient-to-r from-psychedelic-lime via-psychedelic-cyan to-psychedelic-purple;
+  }
+}
+
+@layer utilities {
+  .text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .glass {
+    @apply bg-white/80 backdrop-blur-sm border border-white/20;
+  }
+
+  .glass-dark {
+    @apply bg-primary-900/80 backdrop-blur-sm border border-primary-700/20;
+  }
+}
+
+/* Mapbox popup customization */
+.mapboxgl-popup-content {
+  @apply rounded-xl border border-primary-200 shadow-lg;
+  padding: 0 !important;
+}
+
+.mapboxgl-popup-close-button {
+  @apply text-primary-600 hover:text-primary-800;
+  font-size: 18px !important;
+  padding: 8px !important;
+}
+
+.mapboxgl-popup-tip {
+  @apply border-t-white;
+}

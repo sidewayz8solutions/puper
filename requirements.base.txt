@@ -1,0 +1,11 @@
+# Common deps for both dev & prod
+fastapi
+uvicorn[standard]
+alembic
+SQLAlchemy>=2.0
+python-dotenv
+pydantic
+redis
+requests
+# ...anything else shared...
+
