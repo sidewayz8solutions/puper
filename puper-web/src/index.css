@@ -1,61 +1,137 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap');
 @import 'mapbox-gl/dist/mapbox-gl.css';
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Remove these lines if not using Tailwind via PostCSS. 
+   If you are using Tailwind, make sure your build process includes Tailwind's PostCSS plugin. */
 
 @layer base {
   body {
-    @apply bg-gradient-to-br from-primary-50 to-primary-100 text-primary-900 font-sans;
+    background: linear-gradient(to bottom right, var(--color-primary-50), var(--color-primary-100));
+    color: var(--color-primary-900);
+    font-family: 'Inter', 'Poppins', sans-serif;
     margin: 0;
     min-height: 100vh;
-  }
 
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-display font-semibold;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display, 'Poppins', 'Inter', sans-serif);
+    font-weight: 600;
   }
+  /* Add missing closing bracket for body selector */
+}
 }
 
 @layer components {
+
   /* Custom button styles */
   .btn-primary {
-    @apply bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg;
+    background-color: #2563eb; /* Replace with your primary-600 color */
+    color: #fff;
+    font-weight: 500;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    border-radius: 0.5rem;
+    transition: all 0.2s;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+  }
+  .btn-primary:hover {
+    background-color: #1d4ed8; /* Replace with your primary-700 color */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.16);
   }
 
   .btn-secondary {
-    @apply bg-white hover:bg-primary-50 text-primary-700 border border-primary-200 font-medium py-2 px-4 rounded-lg transition-all duration-200;
+    background-color: #fff;
+    color: #2563eb; /* Replace with your primary-700 color */
+    border: 1px solid #bfdbfe; /* Replace with your primary-200 color */
+    font-weight: 500;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    border-radius: 0.5rem;
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover {
+    background-color: #eff6ff; /* Replace with your primary-50 color */
   }
 
   .btn-psychedelic {
-    @apply bg-gradient-to-r from-psychedelic-purple to-psychedelic-pink text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 shadow-glow hover:shadow-glow-pink;
+    background-image: linear-gradient(to right, var(--psychedelic-purple), var(--psychedelic-pink));
+    color: #fff;
+    font-weight: 500;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    border-radius: 0.75rem;
+    transition: box-shadow 0.2s;
+    box-shadow: 0 0 8px 2px rgba(186, 85, 211, 0.5); /* Example for shadow-glow */
+  }
+  .btn-psychedelic:hover {
+    box-shadow: 0 0 12px 4px rgba(255, 105, 180, 0.6); /* Example for shadow-glow-pink */
   }
 
-  /* Card styles */
+  /* Removed stray properties outside selector blocks. */
+
   .card {
-    @apply bg-white rounded-xl shadow-md border border-primary-100 p-6;
+    background-color: #fff;
+    border-radius: 0.75rem; /* rounded-xl */
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08); /* shadow-md */
+    border: 1px solid var(--color-primary-100);
+    padding: 1.5rem; /* p-6 */
   }
 
-  .card-hover {
-    @apply card hover:shadow-lg hover:border-primary-200 transition-all duration-200;
+  .input-primary {
+    border-radius: 0.75rem;
+    border: 1px solid var(--color-primary-200);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    padding: 0 !important;
+    color: var(--color-primary-600);
+    font-size: 18px !important;
+    padding: 8px !important;
+    background: #fff;
+    outline: none;
   }
+  .input-primary:focus {
+    background: linear-gradient(to right, var(--psychedelic-lime), var(--psychedelic-cyan), var(--psychedelic-purple));
+    box-shadow: 0 0 0 2px var(--color-primary-500);
+  }
+
+  .card-hover:hover {
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    border-color: var(--color-primary-200);
+  }
+
+    /* Removed stray properties that were outside of any selector block. */
 
   /* Input styles */
   .input-primary {
-    @apply w-full px-3 py-2 border border-primary-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white text-primary-900;
-  }
+  border-radius: 0.75rem;
+  border: 1px solid var(--color-primary-200);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  padding: 0 !important;
 
-  /* Map container */
-  .map-container {
-    @apply relative w-full h-full rounded-xl overflow-hidden shadow-lg;
+    color: var(--color-primary-600);
+    font-size: 18px !important;
+    padding: 8px !important;
+  }
+  .mapboxgl-popup-close-button:hover {
+    color: var(--color-primary-800);
+    border-top: 1px solid #fff;
   }
 
   /* Psychedelic gradient backgrounds */
   .bg-psychedelic-1 {
-    @apply bg-gradient-to-r from-psychedelic-purple via-psychedelic-pink to-psychedelic-orange;
+    background-image: linear-gradient(to right, var(--psychedelic-purple), var(--psychedelic-pink), var(--psychedelic-orange));
   }
 
   .bg-psychedelic-2 {
-    @apply bg-gradient-to-r from-psychedelic-lime via-psychedelic-cyan to-psychedelic-purple;
+    background-image: linear-gradient(to right, var(--psychedelic-lime), var(--psychedelic-cyan), var(--psychedelic-purple));
   }
 }
 
@@ -65,26 +141,36 @@
   }
 
   .glass {
-    @apply bg-white/80 backdrop-blur-sm border border-white/20;
+    background: rgba(255,255,255,0.8);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255,255,255,0.2);
   }
 
-  .glass-dark {
-    @apply bg-primary-900/80 backdrop-blur-sm border border-primary-700/20;
-  }
+.glass-dark {
+  background: rgba(var(--color-primary-900-rgb, 30, 41, 59), 0.8);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(var(--color-primary-700-rgb, 29, 78, 216), 0.2);
 }
 
-/* Mapbox popup customization */
 .mapboxgl-popup-content {
-  @apply rounded-xl border border-primary-200 shadow-lg;
+  border-radius: 0.75rem;
+  border: 1px solid var(--color-primary-200);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
   padding: 0 !important;
 }
 
 .mapboxgl-popup-close-button {
-  @apply text-primary-600 hover:text-primary-800;
+  color: var(--color-primary-600);
   font-size: 18px !important;
   padding: 8px !important;
 }
 
+.mapboxgl-popup-close-button:hover {
+  color: var(--color-primary-800);
+  border-top: 1px solid #fff;
+}
+
 .mapboxgl-popup-tip {
-  @apply border-t-white;
+  border-top: 1px solid #fff;
+}
 }
