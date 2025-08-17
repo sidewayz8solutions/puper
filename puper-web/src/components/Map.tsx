@@ -1,10 +1,30 @@
-import React, { useCallback, useRef, useState } from 'react';
-import Map, { Marker, Popup, NavigationControl, GeolocateControl } from 'react-map-gl';
-import { useMapStore, useSearchStore } from '../lib/store';
-import { Restroom } from '../lib/api';
-import PuperLogo from './PuperLogo';
-import { Star, Navigation, Clock, DollarSign, Accessibility } from 'lucide-react';
 import 'mapbox-gl/dist/mapbox-gl.css';
+
+import React, {
+  useCallback,
+  useRef,
+  useState,
+} from 'react';
+
+import {
+  Accessibility,
+  DollarSign,
+  Navigation,
+  Star,
+} from 'lucide-react';
+import Map, {
+  GeolocateControl,
+  Marker,
+  NavigationControl,
+  Popup,
+} from 'react-map-gl';
+
+import type { Restroom } from '../lib/api';
+import {
+  useMapStore,
+  useSearchStore,
+} from '../lib/store';
+import PuperLogo from './PuperLogo';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN || 'pk.eyJ1IjoicHVwZXIiLCJhIjoiY2xkZjEyM3g0MDAwMDNxbzJxbzJxbzJxbyJ9.demo';
 

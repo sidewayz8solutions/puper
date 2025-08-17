@@ -1,93 +1,329 @@
+/* puper-web/src/index.css */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap');
 @import 'mapbox-gl/dist/mapbox-gl.css';
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  body {
-    @apply bg-gradient-to-br from-primary-50 to-primary-100 text-primary-900 font-sans;
+  :root {
+    /* Custom CSS Variables for blue theme */
+    --color-primary-50: #e6f2f8;
+    --color-primary-100: #cce5f1;
+    --color-primary-200: #99cbe3;
+    --color-primary-300: #66b1d5;
+    --color-primary-400: #4da3ce;
+    --color-primary-500: #3B7FA6;
+    --color-primary-600: #336e91;
+    --color-primary-700: #2a5a78;
+    --color-primary-800: #214760;
+    --color-primary-900: #1a3648;
+    
+    /* Accent colors */
+    --accent-teal: #14B8A6;
+    --accent-sky: #0EA5E9;
+    --accent-indigo: #6366F1;
+    --accent-purple: #8B5CF6;
+    --accent-pink: #EC4899;
+    --accent-orange: #F97316;
+    --accent-yellow: #EAB308;
+    --accent-green: #22C55E;
+    
+    /* Font variables */
+    --font-sans: 'Inter', system-ui, sans-serif;
+    --font-display: 'Poppins', system-ui, sans-serif;
+  }
+
+  * {
+    box-sizing: border-box;
     margin: 0;
+    padding: 0;
+  }
+
+  body {
+    background: linear-gradient(135deg, #e6f2f8 0%, #cce5f1 50%, #99cbe3 100%);
+    color: var(--color-primary-900);
+    font-family: var(--font-sans);
     min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Animated background gradient orbs */
+  body::before,
+  body::after {
+    content: '';
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.4;
+    animation: float 20s infinite ease-in-out;
+    pointer-events: none;
+  }
+
+  body::before {
+    width: 500px;
+    height: 500px;
+    background: linear-gradient(135deg, var(--accent-sky), var(--accent-teal));
+    top: -250px;
+    right: -250px;
+  }
+
+  body::after {
+    width: 600px;
+    height: 600px;
+    background: linear-gradient(135deg, var(--color-primary-500), var(--accent-indigo));
+    bottom: -300px;
+    left: -300px;
+    animation-delay: 10s;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-display, 'Poppins', 'Inter', sans-serif);
+    font-family: var(--font-display);
     font-weight: 600;
+    line-height: 1.2;
+  }
+
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Focus styles */
+  :focus-visible {
+    outline: 2px solid var(--color-primary-500);
+    outline-offset: 2px;
   }
 }
 
 @layer components {
-  /* Custom button styles */
+  /* Glass morphism effect */
+  .glass {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px 0 rgba(31, 41, 55, 0.15);
+  }
+
+  .glass-dark {
+    background: rgba(15, 23, 42, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(15, 23, 42, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.2);
+  }
+
+  /* Primary blue gradient button */
   .btn-primary {
-    @apply bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg;
+    @apply px-6 py-3 rounded-xl font-medium text-white transition-all duration-300;
+    background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-700));
+    box-shadow: 0 4px 15px 0 rgba(59, 127, 166, 0.3);
   }
 
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px 0 rgba(59, 127, 166, 0.4);
+  }
+
+  .btn-primary:active {
+    transform: translateY(0);
+  }
+
+  /* Secondary button */
   .btn-secondary {
-    @apply bg-white hover:bg-primary-50 text-primary-700 border border-primary-200 font-medium py-2 px-4 rounded-lg transition-all duration-200;
+    @apply px-4 py-2 rounded-lg font-medium transition-all duration-200;
+    background-color: white;
+    color: var(--color-primary-700);
+    border: 1px solid var(--color-primary-300);
   }
 
-  .btn-psychedelic {
-    @apply bg-gradient-to-r from-psychedelic-purple to-psychedelic-pink text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 shadow-glow hover:shadow-glow-pink;
+  .btn-secondary:hover {
+    background-color: var(--color-primary-50);
+    border-color: var(--color-primary-400);
   }
 
-  /* Card styles */
-  .card {
-    @apply bg-white rounded-xl shadow-md border border-primary-100 p-6;
+  /* Accent gradient buttons */
+  .btn-accent {
+    @apply px-6 py-3 rounded-xl font-medium text-white transition-all duration-300;
+    background: linear-gradient(135deg, var(--accent-teal), var(--accent-sky), var(--accent-indigo));
+    background-size: 200% 200%;
+    animation: gradient-shift 3s ease infinite;
+    box-shadow: 0 4px 15px 0 rgba(20, 184, 166, 0.4);
   }
 
-  .card-hover {
-    @apply bg-white rounded-xl shadow-md border border-primary-100 p-6
-           hover:shadow-lg hover:border-primary-200 transition-all duration-200;
+  .btn-accent:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px 0 rgba(14, 165, 233, 0.5);
   }
 
   /* Input styles */
   .input-primary {
-    @apply w-full px-3 py-2 border border-primary-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white text-primary-900;
+    @apply w-full px-4 py-2 rounded-lg border transition-all duration-200;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-color: var(--color-primary-300);
+    color: var(--color-primary-900);
   }
 
-  /* Map container */
-  .map-container {
-    @apply relative w-full h-full rounded-xl overflow-hidden shadow-lg;
+  .input-primary:focus {
+    @apply outline-none;
+    border-color: var(--color-primary-500);
+    box-shadow: 0 0 0 3px rgba(59, 127, 166, 0.1);
   }
 
-  /* Psychedelic gradient backgrounds */
-  .bg-psychedelic-1 {
-    @apply bg-gradient-to-r from-psychedelic-purple via-psychedelic-pink to-psychedelic-orange;
+  /* Card styles */
+  .card {
+    @apply rounded-xl p-6;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 40px rgba(15, 23, 42, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.5);
   }
 
-  .bg-psychedelic-2 {
-    @apply bg-gradient-to-r from-psychedelic-lime via-psychedelic-cyan to-psychedelic-purple;
+  .card-hover {
+    @apply card transition-all duration-300 cursor-pointer;
+  }
+
+  .card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 60px rgba(15, 23, 42, 0.15);
+  }
+
+  /* Gradient text */
+  .text-gradient {
+    background: linear-gradient(135deg, var(--color-primary-500), var(--accent-teal));
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+  .text-gradient-accent {
+    background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink), var(--accent-orange));
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    background-size: 200% 200%;
+    animation: gradient-shift 3s ease infinite;
+  }
+
+  /* Loading spinner */
+  .spinner {
+    @apply w-8 h-8 border-4 rounded-full;
+    border-color: var(--color-primary-200);
+    border-top-color: var(--color-primary-500);
+    animation: spin 1s linear infinite;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--color-primary-100);
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-700));
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, var(--color-primary-600), var(--color-primary-800));
+  }
+
+  /* Map markers */
+  .map-marker {
+    @apply transform transition-transform duration-200;
+  }
+
+  .map-marker:hover {
+    transform: scale(1.2);
+  }
+
+  /* Tooltip */
+  .tooltip {
+    @apply absolute z-50 px-3 py-2 text-sm font-medium text-white rounded-lg;
+    background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-700));
+    box-shadow: 0 4px 15px rgba(59, 127, 166, 0.3);
+  }
+
+  /* Badge styles */
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .badge-success {
+    @apply badge bg-green-100 text-green-800;
+  }
+
+  .badge-warning {
+    @apply badge bg-yellow-100 text-yellow-800;
+  }
+
+  .badge-error {
+    @apply badge bg-red-100 text-red-800;
+  }
+
+  .badge-info {
+    @apply badge bg-sky-100 text-sky-800;
+  }
+
+  .badge-accent {
+    @apply badge text-white;
+    background: linear-gradient(135deg, var(--accent-teal), var(--accent-sky));
+  }
+
+  /* Rating stars */
+  .rating-star {
+    @apply text-yellow-400 transition-all duration-200;
+  }
+
+  .rating-star:hover {
+    @apply text-yellow-500 transform scale-110;
+  }
+
+  /* Sidebar styles */
+  .sidebar {
+    @apply fixed left-0 top-0 h-full w-20 flex flex-col;
+    background: linear-gradient(180deg, var(--color-primary-600), var(--color-primary-800));
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .sidebar-expanded {
+    @apply w-64;
+  }
+
+  /* Search panel */
+  .search-panel {
+    @apply w-96 h-full overflow-y-auto;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Mobile responsive utilities */
+  @media (max-width: 768px) {
+    .search-panel {
+      @apply w-full absolute z-20;
+    }
+    
+    .sidebar {
+      @apply w-full h-16 flex-row bottom-0 top-auto;
+    }
   }
 }
 
 @layer utilities {
-  .text-shadow {
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-
-  .glass {
-    @apply bg-white/80 backdrop-blur-sm border border-white/20;
-  }
-
-  .glass-dark {
-    @apply bg-primary-900/80 backdrop-blur-sm border border-primary-700/20;
-  }
-}
-
-/* Mapbox popup customization */
-.mapboxgl-popup-content {
-  @apply rounded-xl border border-primary-200 shadow-lg;
-  padding: 0 !important;
-}
-
-.mapboxgl-popup-close-button {
-  @apply text-primary-600 hover:text-primary-800;
-  font-size: 18px !important;
-  padding: 8px !important;
-}
-
-.mapboxgl-popup-tip {
-  @apply border-t-white;
-}
+  /* Animations */
+  @keyframes gradient-shift {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 

@@ -1,0 +1,229 @@
+# Makefile for Puper App Development
+
+# Variables
+FRONTEND_DIR = puper-web
+BACKEND_DIR = backend
+DOCKER_COMPOSE = docker-compose
+
+# Colors for output
+RED = \033[0;31m
+GREEN = \033[0;32m
+YELLOW = \033[1;33m
+NC = \033[0m # No Color
+
+.PHONY: help
+help: ## Show this help message
+	@echo "$(GREEN)Puper App Development Commands:$(NC)"
+	@echo ""
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "$(YELLOW)%-20s$(NC) %s\n", $$1, $$2}'
+
+# Installation
+.PHONY: install
+install: ## Install all dependencies (frontend + backend)
+	@echo "$(GREEN)Installing frontend dependencies...$(NC)"
+	cd $(FRONTEND_DIR) && npm install
+	@echo "$(GREEN)Installing backend dependencies...$(NC)"
+	pip install -r requirements.txt
+	@echo "$(GREEN)All dependencies installed!$(NC)"
+
+# Development
+.PHONY: dev
+dev: ## Start development servers (frontend + backend)
+	@echo "$(GREEN)Starting development servers...$(NC)"
+	concurrently \
+		"make dev-backend" \
+		"make dev-frontend"
+
+.PHONY: dev-frontend
+dev-frontend: ## Start frontend development server only
+	@echo "$(GREEN)Starting frontend dev server...$(NC)"
+	cd $(FRONTEND_DIR) && npm run dev
+
+.PHONY: dev-backend
+dev-backend: ## Start backend development server only
+	@echo "$(GREEN)Starting backend dev server...$(NC)"
+	uvicorn main:app --reload --port 8000
+
+# Database
+.PHONY: db-create
+db-create: ## Create database
+	@echo "$(GREEN)Creating database...$(NC)"
+	createdb puper_db
+
+.PHONY: db-migrate
+db-migrate: ## Run database migrations
+	@echo "$(GREEN)Running migrations...$(NC)"
+	alembic upgrade head
+
+.PHONY: db-rollback
+db-rollback: ## Rollback last migration
+	@echo "$(YELLOW)Rolling back last migration...$(NC)"
+	alembic downgrade -1
+
+.PHONY: db-reset
+db-reset: ## Reset database (drop and recreate)
+	@echo "$(RED)Resetting database...$(NC)"
+	dropdb puper_db --if-exists
+	createdb puper_db
+	make db-migrate
+	@echo "$(GREEN)Database reset complete!$(NC)"
+
+.PHONY: db-seed
+db-seed: ## Seed database with sample data
+	@echo "$(GREEN)Seeding database...$(NC)"
+	python seed_data.py
+
+# Building
+.PHONY: build
+build: ## Build frontend for production
+	@echo "$(GREEN)Building frontend...$(NC)"
+	cd $(FRONTEND_DIR) && npm run build
+	@echo "$(GREEN)Build complete! Output in $(FRONTEND_DIR)/dist$(NC)"
+
+.PHONY: build-docker
+build-docker: ## Build Docker images
+	@echo "$(GREEN)Building Docker images...$(NC)"
+	$(DOCKER_COMPOSE) build
+
+# Docker
+.PHONY: docker-up
+docker-up: ## Start Docker containers
+	@echo "$(GREEN)Starting Docker containers...$(NC)"
+	$(DOCKER_COMPOSE) up -d
+
+.PHONY: docker-down
+docker-down: ## Stop Docker containers
+	@echo "$(YELLOW)Stopping Docker containers...$(NC)"
+	$(DOCKER_COMPOSE) down
+
+.PHONY: docker-logs
+docker-logs: ## View Docker container logs
+	$(DOCKER_COMPOSE) logs -f
+
+.PHONY: docker-clean
+docker-clean: ## Clean Docker containers and volumes
+	@echo "$(RED)Cleaning Docker containers and volumes...$(NC)"
+	$(DOCKER_COMPOSE) down -v
+
+# Testing
+.PHONY: test
+test: ## Run all tests
+	@echo "$(GREEN)Running all tests...$(NC)"
+	make test-frontend
+	make test-backend
+
+.PHONY: test-frontend
+test-frontend: ## Run frontend tests
+	@echo "$(GREEN)Running frontend tests...$(NC)"
+	cd $(FRONTEND_DIR) && npm run test
+
+.PHONY: test-backend
+test-backend: ## Run backend tests
+	@echo "$(GREEN)Running backend tests...$(NC)"
+	pytest tests/
+
+.PHONY: test-coverage
+test-coverage: ## Run tests with coverage
+	@echo "$(GREEN)Running tests with coverage...$(NC)"
+	cd $(FRONTEND_DIR) && npm run test:coverage
+	pytest tests/ --cov=. --cov-report=html
+
+# Code Quality
+.PHONY: lint
+lint: ## Run linters
+	@echo "$(GREEN)Running linters...$(NC)"
+	cd $(FRONTEND_DIR) && npm run lint
+	flake8 .
+	mypy .
+
+.PHONY: format
+format: ## Format code
+	@echo "$(GREEN)Formatting code...$(NC)"
+	cd $(FRONTEND_DIR) && prettier --write "src/**/*.{ts,tsx,js,jsx,css}"
+	black .
+
+.PHONY: type-check
+type-check: ## Run TypeScript type checking
+	@echo "$(GREEN)Running TypeScript type check...$(NC)"
+	cd $(FRONTEND_DIR) && tsc --noEmit
+
+# Cleaning
+.PHONY: clean
+clean: ## Clean build artifacts and caches
+	@echo "$(YELLOW)Cleaning build artifacts...$(NC)"
+	rm -rf $(FRONTEND_DIR)/dist
+	rm -rf $(FRONTEND_DIR)/node_modules
+	rm -rf __pycache__
+	rm -rf .pytest_cache
+	rm -rf .mypy_cache
+	find . -type d -name "*.egg-info" -exec rm -rf {} +
+	@echo "$(GREEN)Clean complete!$(NC)"
+
+.PHONY: clean-all
+clean-all: clean ## Clean everything including dependencies
+	@echo "$(RED)Cleaning all dependencies...$(NC)"
+	rm -rf $(FRONTEND_DIR)/package-lock.json
+	rm -rf venv
+	@echo "$(GREEN)Full clean complete!$(NC)"
+
+# Deployment
+.PHONY: deploy-frontend
+deploy-frontend: build ## Deploy frontend to Vercel
+	@echo "$(GREEN)Deploying frontend to Vercel...$(NC)"
+	cd $(FRONTEND_DIR) && vercel --prod
+
+.PHONY: deploy-backend
+deploy-backend: ## Deploy backend to production
+	@echo "$(GREEN)Deploying backend...$(NC)"
+	# Add your backend deployment commands here
+	@echo "$(YELLOW)Configure your backend deployment in Makefile$(NC)"
+
+# Utilities
+.PHONY: check-env
+check-env: ## Check if environment variables are set
+	@echo "$(GREEN)Checking environment variables...$(NC)"
+	@test -f .env || (echo "$(RED)Error: .env file not found$(NC)" && exit 1)
+	@test -f $(FRONTEND_DIR)/.env || (echo "$(RED)Error: $(FRONTEND_DIR)/.env file not found$(NC)" && exit 1)
+	@echo "$(GREEN)Environment files found!$(NC)"
+
+.PHONY: logs
+logs: ## View application logs
+	@echo "$(GREEN)Showing application logs...$(NC)"
+	tail -f logs/*.log
+
+.PHONY: shell-backend
+shell-backend: ## Open Python shell with backend context
+	@echo "$(GREEN)Opening Python shell...$(NC)"
+	python -i -c "from main import *; from models import *"
+
+.PHONY: shell-db
+shell-db: ## Open database shell
+	@echo "$(GREEN)Opening database shell...$(NC)"
+	psql puper_db
+
+# Quick Commands
+.PHONY: up
+up: docker-up ## Alias for docker-up
+
+.PHONY: down
+down: docker-down ## Alias for docker-down
+
+.PHONY: restart
+restart: down up ## Restart all services
+
+.PHONY: status
+status: ## Check status of all services
+	@echo "$(GREEN)Checking service status...$(NC)"
+	@$(DOCKER_COMPOSE) ps
+	@echo ""
+	@echo "$(GREEN)Frontend:$(NC) http://localhost:5173"
+	@echo "$(GREEN)Backend:$(NC) http://localhost:8000"
+	@echo "$(GREEN)API Docs:$(NC) http://localhost:8000/docs"
+
+# Setup
+.PHONY: setup
+setup: install check-env db-create db-migrate ## Complete initial setup
+	@echo "$(GREEN)✨ Setup complete! Run 'make dev' to start developing.$(NC)"
+
+# Default target
+.DEFAULT_GOAL := help

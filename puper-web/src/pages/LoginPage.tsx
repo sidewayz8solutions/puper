@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from 'react';
 
 import {
@@ -15,6 +16,7 @@ import { z } from 'zod';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 
+import PuperLogo from '../components/PuperLogo';
 import { authAPI } from '../lib/api';
 import { useAuthStore } from '../lib/store';
 
@@ -48,8 +50,22 @@ const LoginPage: React.FC = () => {
       login(user, access_token);
       toast.success('Welcome back!');
       navigate('/');
-    } catch (error: any) {
-      toast.error(error.response?.data?.detail || 'Login failed');
+    } catch (error: unknown) {
+      if (
+        typeof error === 'object' &&
+        error !== null &&
+        'response' in error &&
+        typeof (error as any).response === 'object' &&
+        (error as any).response !== null &&
+        'data' in (error as any).response &&
+        typeof (error as any).response.data === 'object' &&
+        (error as any).response.data !== null &&
+        'detail' in (error as any).response.data
+      ) {
+        toast.error((error as any).response.data.detail || 'Login failed');
+      } else {
+        toast.error('Login failed');
+      }
     } finally {
       setIsLoading(false);
     }

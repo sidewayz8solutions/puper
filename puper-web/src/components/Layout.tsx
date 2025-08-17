@@ -16,6 +16,7 @@ import {
   useAuthStore,
   useUIStore,
 } from '../lib/store';
+import PuperLogo from './PuperLogo';
 
 interface LayoutProps {
   children: React.ReactNode;
