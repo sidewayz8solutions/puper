@@ -1,6 +1,5 @@
-// puper-web/tailwind.config.js
 /** @type {import('tailwindcss').Config} */
-export default {
+module.exports = {
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
@@ -24,22 +23,12 @@ export default {
         },
         
         // Psychedelic accent colors
-        psychedelic: {
-          purple: '#8B5CF6',
-          pink: '#EC4899',
-          orange: '#F97316',
-          lime: '#84CC16',
-          cyan: '#06B6D4',
-          yellow: '#EAB308',
-          
-          // Softer variants for backgrounds
-          'purple-soft': '#E9D5FF',
-          'pink-soft': '#FCE7F3',
-          'orange-soft': '#FED7AA',
-          'lime-soft': '#ECFCCB',
-          'cyan-soft': '#CFFAFE',
-          'yellow-soft': '#FEF3C7',
-        },
+        'psychedelic-purple': '#8B5CF6',
+        'psychedelic-pink': '#EC4899',
+        'psychedelic-orange': '#F97316',
+        'psychedelic-lime': '#84CC16',
+        'psychedelic-cyan': '#06B6D4',
+        'psychedelic-yellow': '#EAB308',
         
         // Semantic colors
         success: '#22C55E',
@@ -133,6 +122,7 @@ export default {
       
       boxShadow: {
         'glow': '0 0 20px rgba(139, 92, 246, 0.3)',
+        'glow-pink': '0 0 20px rgba(236, 72, 153, 0.3)',
         'glow-strong': '0 0 30px rgba(236, 72, 153, 0.5)',
         'glow-brown': '0 0 20px rgba(161, 128, 114, 0.3)',
         'inner-glow': 'inset 0 0 20px rgba(139, 92, 246, 0.2)',

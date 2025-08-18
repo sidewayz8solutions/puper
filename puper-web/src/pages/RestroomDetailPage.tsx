@@ -20,7 +20,7 @@ import {
 
 import { useQuery } from '@tanstack/react-query';
 
-import ReviewSystem from '../components/ReviewSystem';
+// import ReviewSystem from '../components/ReviewSystem';
 import { restroomAPI } from '../lib/api';
 
 const RestroomDetailPage: React.FC = () => {
@@ -235,7 +235,11 @@ const RestroomDetailPage: React.FC = () => {
           </div>
 
           {/* Reviews Section */}
-          <ReviewSystem restroomId={restroom.id} />
+          {/* <ReviewSystem restroomId={restroom.id} /> */}
+          <div className="card p-6">
+            <h3 className="text-lg font-semibold text-primary-800">Reviews</h3>
+            <p className="text-primary-600">Review system temporarily disabled</p>
+          </div>
         </div>
 
         {/* Sidebar */}
